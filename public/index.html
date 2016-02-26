@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>scraplite website</title>
+        <script src="js/jquery-2.2.1.min.js" type="text/javascript"> </script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.min.js">  </script>
+        <script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
+        
+    </head>
+    <body>
+        <p> You have reached the scraplite server</p>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">#</span>
+            <input id="urlInput" type="text" class="form-control" placeholder="Url to Scrap" aria-describedby="basic-addon1">
+            <span class="input-group-btn">
+                <button id="urlInputSubmit" onclick="sendToScrap()" class="btn btn-default" type="button">Scrap!</button>
+            </span>
+        </div>
+        
+        <div id="scrapPage" style="display: block;width : 100%; height : auto; min-height: 100px; background: #EFEFEF">
+            <iframe></iframe>
+        </div>
+        
+    </body>
+    
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    
+    <script>
+        $( document ).ready(function() {
+            console.log( "ready!" );
+        });
+        function sendToScrap() {
+            var url = $("#urlInput").val();
+            if (url && url != "") {
+                
+                $("#urlInput").prop('disabled', true);
+                $("#urlInputSubmit").prop('disabled', true);
+                $.ajax({
+                    url: 'http://localhost:8080/api/parseUrl',
+                    type: 'post',
+                    data: {
+                        url: url
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(JSON.stringify(data));
+                        $("#scrapPage iframe").attr("src", "http://www.google.com/");
+                    },
+                    failure: function (err) {
+                        $("#urlInput").prop('disabled', false);
+                        $("#urlInputSubmit").prop('disabled', false);
+                    }
+                });
+            }
+            
+            console.log(url);
+        }
+        
+        
+    </script>
+    
+</html>
